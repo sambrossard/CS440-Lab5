@@ -1,9 +1,4 @@
-"""Q-learning for the vacuum grid, reusing aima-python's QLearningAgent.
-
-aima's agent explores with an exploration function (Ne, Rplus). The lab asks
-for epsilon, so EpsilonGreedyQAgent keeps aima's Q-update and replaces the
-action choice with epsilon-greedy.
-"""
+"""Epsilon-greedy Q-learning for the vacuum grid, built on aima's QLearningAgent."""
 
 from __future__ import annotations
 
@@ -17,7 +12,7 @@ class EpsilonGreedyQAgent(QLearningAgent):
     """aima's QLearningAgent with epsilon-greedy exploration and a constant learning rate."""
 
     def __init__(self, mdp: MDP, alpha: float, epsilon: float) -> None:
-        """Ne=0 makes aima's exploration function return Q itself, so its choice is greedy."""
+        """Ne=0 makes aima's own action choice greedy."""
         super().__init__(mdp, Ne=0, Rplus=0, alpha=lambda n: alpha)
         self.epsilon = epsilon
 
@@ -25,13 +20,11 @@ class EpsilonGreedyQAgent(QLearningAgent):
         """Update Q from the last step and return the next action (None at a terminal)."""
         state, reward = self.update_state(percept)
         if state in self.terminals:
-            # A terminal's utility is its reward. Set it before aima's update so
-            # the step into the terminal learns from it right away.
+            # A terminal's Q is its reward; set it before aima's update uses it.
             self.Q[state, None] = reward
         action = super().__call__(percept)
         if state in self.terminals:
-            # aima resets on the *next* call, which ends that episode at once;
-            # resetting here keeps every episode.
+            # Reset now; aima would reset on the next call and waste that episode.
             self.reset_episode()
             return None
         if random.random() < self.epsilon:
@@ -59,10 +52,7 @@ def sample_next_state(mdp: MDP, state: tuple, action: tuple) -> tuple:
 
 
 def run_episode(agent: EpsilonGreedyQAgent, mdp: MDP, max_steps: int = 200) -> tuple[float, int]:
-    """Run one episode from mdp.init, like aima's run_single_trial but with a step cap.
-
-    Returns the total reward collected and the number of moves made.
-    """
+    """Run one capped episode from mdp.init; return (total reward, moves made)."""
     state = mdp.init
     total_reward = 0.0
     for steps in range(max_steps + 1):

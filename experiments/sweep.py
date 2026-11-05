@@ -1,8 +1,4 @@
-"""Hyperparameter sweep used to choose the values recorded in AGENTS.md.
-
-Changes one value at a time from the chosen baseline and averages over seeds.
-Run from the repository root: python -m experiments.sweep
-"""
+"""One-at-a-time hyperparameter sweep behind AGENTS.md. Run: python -m experiments.sweep"""
 
 from __future__ import annotations
 

@@ -27,10 +27,16 @@ Q(s, a) <- Q(s, a) + alpha * (r + gamma * max_a' Q(s', a') - Q(s, a))
   better paths.
 - AIMA uses an exploration function f(u, n) with parameters Ne and Rplus:
   try each action at least Ne times, treating unexplored actions as worth Rplus.
-- A common alternative is epsilon-greedy.
+- This lab uses epsilon-greedy instead: with probability epsilon take a
+  random action, otherwise the action with the highest Q.
 
-## In aima-python
+## In this repo
 
-- reinforcement_learning.py: QLearningAgent(mdp, Ne, Rplus, alpha)
-- Hyperparameters (alpha, gamma, Ne, Rplus, episodes) will be chosen in the
-  implementation; see the Hyperparameters section of AGENTS.md.
+- vacuum/learning.py: EpsilonGreedyQAgent subclasses aima's QLearningAgent,
+  keeping its Q-update but with Ne=0 (greedy), a constant alpha, and
+  epsilon-greedy action choice. It also resets at each terminal, because
+  aima's agent wastes the episode after one.
+- train(mdp, episodes, alpha, epsilon, seed) trains a seeded agent;
+  greedy_policy() returns the learned policy.
+- Chosen values: alpha 0.3, gamma 0.9, epsilon 0.1, 2000 episodes
+  (see the Hyperparameters section of AGENTS.md; set by experiments/sweep.py).
