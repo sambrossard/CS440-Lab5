@@ -17,17 +17,25 @@ for the living reward, discount factor, learning rate, and epsilon.
   must learn from experience (Q-learning, AIMA ch. 22)
 
 ## Hyperparameters
-Chosen values and the reasoning for each are recorded here once experiments
-justify them; do not change them without updating this section.
-- Living reward: TBD
-- Discount factor (gamma): TBD
-- Learning rate (alpha): TBD
-- Epsilon (exploration): TBD
+Chosen with experiments/sweep.py (one value varied at a time, 20 seeds each);
+do not change them without rerunning the sweep and updating this section.
+- Living reward: -0.04. Value iteration's optimal policy is the same for -0.04,
+  -0.4 and -1, so a bigger penalty only lowers rewards; matches Lab 3.
+- Discount factor (gamma): 0.9. Fewest steps (7.7); 0.5 is too short-sighted
+  (9.0 steps) and 0.99 learns slower in 500 episodes (8.6 steps).
+- Learning rate (alpha): 0.3. Best goal rate (99.6%, 7.8 steps vs 7.4 optimal);
+  0.1 converges slower, 0.5+ is noisy under the 80/10/10 slippery moves.
+- Epsilon (exploration): 0.1. 0 locks onto a longer route; 0.2+ wastes reward exploring.
+- Episodes: 2000.
 
 ## Layout and coding standards
 - aima/ is a vendored copy of the aima-python modules we need (mdp.py,
   reinforcement_learning.py, utils.py). Reuse its classes; do not edit it.
 - vacuum/ holds our code: environment.py (the grid) and learning.py (training).
+  experiments/ holds the hyperparameter sweep.
+- aima quirks we work around in vacuum/, not by editing aima/: GridMDP treats a
+  0 reward as a wall (so the living reward must be nonzero), and QLearningAgent
+  wastes every other episode after a terminal (EpsilonGreedyQAgent resets instead).
 - tests/ holds pytest tests; seed all randomness so results are reproducible.
 - Python 3; docstrings and type hints on every function and class.
 - Read only the notes and source definitions needed for the assigned task.
