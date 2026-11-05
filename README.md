@@ -27,6 +27,7 @@ scripts/context-switcher.sh   Hook script: prompt keywords -> context notes, onc
 aima/                         Vendored aima-python modules (mdp, reinforcement_learning, utils)
 vacuum/                       Our code: environment.py, learning.py
 experiments/sweep.py          Hyperparameter sweep (python -m experiments.sweep)
+results.ipynb                 Trains the agent and shows the results
 tests/                        pytest tests
 ```
 
@@ -40,13 +41,21 @@ tests/                        pytest tests
 
 MCP is not used.
 
-## Setup
+## How to run
+
+From the repository root:
 
 ```bash
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-pytest
+
+pytest                         # 13 tests: grid, Q-update, training
+jupyter notebook results.ipynb # train with the chosen values; see the policy, rewards, Q-values
+python -m experiments.sweep    # rerun the hyperparameter sweep (a minute or two)
 ```
+
+The notebook is saved with its outputs, so the results can be read without running it.
+To use the hook, skills, and sub-agents, open Claude Code from the repository root.
 
 ## Progress
 
@@ -54,8 +63,8 @@ pytest
 - [x] Grid environment (vacuum/environment.py) with tests
 - [x] Q-learning training (vacuum/learning.py) with tests
 - [x] Living reward, discount, learning rate, and epsilon selected and justified in AGENTS.md
-- [ ] Results notebook: learned policy grid, reward per episode, Q-values
-- [ ] Demo the hook, skills, and sub-agents in Claude Code for the video
+- [x] Results notebook: learned policy grid, reward per episode, Q-values
+- [ ] Video: code features, hyperparameter choices, and the running solution
 
 ## Chosen hyperparameters
 
