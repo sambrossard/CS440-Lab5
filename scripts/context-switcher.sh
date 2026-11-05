@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# context-switcher.sh - UserPromptSubmit hook (hooks feature, dynamic context imports)
-# Reads the prompt JSON from stdin, picks relevant context files by keyword,
-# and prints them so Claude Code adds them to the agent's context.
-# Idempotent: each file is injected at most once per session (grep -qxF, slide p. 24).
+# UserPromptSubmit hook: prints .claude/context notes matching prompt keywords,
+# each at most once per session.
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CONTEXT_DIR="$PROJECT_DIR/.claude/context"
